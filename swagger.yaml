@@ -1,0 +1,214 @@
+openapi: 3.0.0
+info:
+  title: SportRadar API
+  version: 1.0.0
+  description: API complète pour la gestion des utilisateurs, challenges, activités et statistiques.
+servers:
+  - url: http://localhost:5000
+paths:
+  /api/auth/register:
+    post:
+      summary: Inscription d'un nouvel utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                isBusinessUser:
+                  type: boolean
+                role:
+                  type: string
+              required:
+                - firstName
+                - lastName
+                - email
+                - password
+      responses:
+        '201':
+          description: Utilisateur créé avec succès
+        '400':
+          description: Requête invalide
+  /api/auth/login:
+    post:
+      summary: Connexion utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Connexion réussie avec token JWT
+        '401':
+          description: Identifiants invalides
+  /api/users/profile:
+    get:
+      summary: Récupérer le profil utilisateur
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Profil utilisateur
+        '401':
+          description: Non autorisé
+    put:
+      summary: Mettre à jour le profil utilisateur
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Profil mis à jour
+        '401':
+          description: Non autorisé
+  /api/users/stats:
+    get:
+      summary: Récupérer les statistiques utilisateur
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Statistiques utilisateur
+        '401':
+          description: Non autorisé
+  /api/challenges:
+    get:
+      summary: Liste des challenges
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Liste des challenges
+    post:
+      summary: Créer un challenge
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                goal:
+                  type: integer
+                unit:
+                  type: string
+                sportType:
+                  type: string
+                startDate:
+                  type: string
+                  format: date
+                endDate:
+                  type: string
+                  format: date
+                rewards:
+                  type: string
+              required:
+                - name
+                - description
+                - goal
+                - unit
+                - sportType
+                - startDate
+                - endDate
+      responses:
+        '201':
+          description: Challenge créé
+  /api/challenges/{id}:
+    put:
+      summary: Mettre à jour un challenge
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID du challenge
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                goal:
+                  type: integer
+                unit:
+                  type: string
+                sportType:
+                  type: string
+                startDate:
+                  type: string
+                  format: date
+                endDate:
+                  type: string
+                  format: date
+                rewards:
+                  type: string
+      responses:
+        '200':
+          description: Challenge mis à jour
+    delete:
+      summary: Supprimer un challenge
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID du challenge
+      responses:
+        '200':
+          description: Challenge supprimé
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
