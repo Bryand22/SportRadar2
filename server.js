@@ -120,7 +120,7 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`=================================`);
   console.log(`🚀 Serveur démarré sur le port ${PORT}`);
   console.log(`🔒 JWT_SECRET: ${process.env.JWT_SECRET ? 'défini' : 'non défini'}`);
