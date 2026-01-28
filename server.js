@@ -67,7 +67,10 @@ app.use(limiter);
 
 // Middleware pour parser le JSON
 app.use(express.json());
-
+// Route Accueille
+app.get('/', (req, res) => {
+  res.json({ message: "SportRadar API is running!", status: "OK" });
+});
 // Routes API
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
